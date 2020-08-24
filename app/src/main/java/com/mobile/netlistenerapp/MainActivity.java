@@ -28,4 +28,10 @@ public class MainActivity extends AppCompatActivity implements NetChangeObserver
     public void onConnect(NetType type) {
         Log.e(Constants.LOG_TAG, "type -" + type);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        NetworkManager.getDefault().unregisterListener();
+    }
 }

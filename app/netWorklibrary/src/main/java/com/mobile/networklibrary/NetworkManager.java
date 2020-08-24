@@ -17,13 +17,6 @@ public class NetworkManager {
         mNetStateReceiver = new NetStateReceiver();
     }
 
-    public void setListener( NetChangeObserver listener){
-
-        if (listener!=null){
-            mNetStateReceiver.setNetChangeObserver(listener);
-        }
-    }
-
     public static NetworkManager getDefault(){
         if (mInstance == null){
             synchronized (NetworkManager.class){
@@ -47,6 +40,26 @@ public class NetworkManager {
         //动态的广播注册 （7.0 +）
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constants.ANDROID_NET_CHANGE_ACTION);
+
         application.registerReceiver(mNetStateReceiver,filter);
+    }
+
+    /**
+     * 供外面的API
+     * @param listener
+     */
+    public void setListener(NetChangeObserver listener){
+        if (listener!=null){
+            mNetStateReceiver.setNetChangeObserver(listener);
+        }
+    }
+
+    /**
+     * 注销广播
+     */
+    public void unregisterListener(){
+        if (mApplication!=null){
+            mApplication.unregisterReceiver(mNetStateReceiver);
+        }
     }
 }
